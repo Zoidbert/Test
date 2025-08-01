@@ -1,0 +1,60 @@
+//TMC.TXT updated 2025-07-25
+//0; Regstr; R0/W1; Value; NameOfRegister;	Comment;
+1;	79H;	R;	9600H;	BaudRateHEX;	//Must always be read first!
+
+//Select Basic Settings
+2;	1BH;	W;	4;	        Mode,PolePairs;	    //SEL-Value from 2-10	
+//3;18H;	W;	3999;	    PWM-MaxCount;	    //25KHz 3999 is default value
+//4;19H;	W;	1414h;	    BBM-Time-H-L;	    //DeadTimeHighLow 14h is default value!!
+5;	26H;    W;	10000;	    ABN Positions/Rot;	    //SEL-Value 1024, 4096, 10000 Position per Rotation
+6;	25H;	W;	8;	        ABN_DECODE_MODE;        //use_abn_as_n 
+7;	08H;	W;	FEFF8000h;  ADCI1-Scale,Offset;	    //0x0101=257, 0x8000=Center
+8;	09H;	W;	FEFF8000h;  ADCI0-Scale,Offset;	    //0x0101=257, 0x8000=Center
+9;  29H;	W;	8500;	    PHI_M_OFFSET 	    //ABN_DECODER Offset mechanical angle
+10; 37H;    W;  15000;      HallOffs_PHI-M;         //Hall Offset mechanical angle
+
+//Select Mode
+11;	52H;	W;	2;	    PHI-E-OpenLoop;	    //SEL-Value ElectricAngleSelection 2=Openloop, 3=abn, 5=hal 
+12;	63H;	W;	8;	    MotionMode;		    //SEL-Value MotionMode Velocity: 8=UQ-UD-EXT, 11=AGPI_A , 14=PWM_I 
+
+15; 24H;    W;  3000;	UQ=0, UD-EXT-Value;	//SEL-Step 1, 10, 100, 1000 UQ-UD-EXT (Word-Word)
+16;	20H;	W;	60;     OpenLoopAccel;		//SEL-Step 1, 10, 100 OpenLoopAccelerationofPHI
+17;	21H;	W;	10;	    OpenLoopSpeedTrgt;	//SEL-Step 1, 10, 100 OpenLoopSpeedTargetPHI
+18;	1AH;	W;	07H;	ONPWM-CntrlFOC; 	//ActivatePWMforCenteredFOC, SpaceVectorFOCDisabled
+
+
+29;  75H;   R;  0;      BrakeChopper HIGH-LOW;  //Default FFFFH-FFFFH
+//Read OpenLoop ActualVelocity an ActualPHI
+30;	22H;	R;	0;	ActualOpenLoopSpd;	//Read Actual OpenLoopSpeed
+31;	23H;	R;	0;	ActualOpenLoopPHI;	//Read Actual OpenLoopPHI Angle
+						
+//Read Encoder Counters						
+35;	27H;	R;	0;	ABN Count;	//Count of Encoder				
+36;	28H;	R;	0;	ABN CountN;	//Count since Ref
+	
+//Read IU, IV and VM
+97;	03h;	W;	0;	ADC-I1+I0;	//Readback ADC-I1+I0_RAW				
+98;	03h;	W;	1;	ADC-VM;		//Readback ADC-VM_RAW 		 
+
+//91;	01H;	W;	00H;	IC-Type;	//Readback Type				
+//92;	01H;	W;	01H;	IC-Version	//Readback Version				
+//93;	01H;	W;	02H;	IC-Date;	//Readback Date				
+//94;	01H;	W;	03H;	IC-Time;	//Readback Time			
+//95;	01H;	W;	04H;	IC-Variant;	//Readback Variant				
+//96;	01H;	W;	05H;	IC-Build;	//Readback Build						
+
+
+//Test Screens
+//117;	70H;	R;	0;	EmptyRegister;	//
+118;	71H;	R;	0;	Encoder+HALL Test;	//
+//119;	72H;	R;	0;	EmptyRegister;	//
+120;	73H;	R;	0;	PWM Test;	    //
+121;	74H;	R;	0;	NOVA_7730@sunny7855;	//SSID@Password	
+122;	76H;	R;	0;	PORTIBx21;	    //SELECT 
+//123;	77H;	R;	0;	EmptyRegister;	//
+124;	7AH;	R;	0;	Loop-time;  	//Display Loop Time
+125;	7BH;	R;	0;	ReadADCPB;	    //Read ADC Powerboard	
+
+		
+//127;	7EH;	R;	0;	EmptyRegister;  //			
+128;	7FH;	R;	0;	ESP-IO;  //

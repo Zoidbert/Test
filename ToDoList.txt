@@ -1,0 +1,75 @@
+//Gerard updated 2025-07-25 ToDoList.TXT
+IB = Input Board
+MB = Main Board
+PB = Power Board
+All Text in the code in English
+
+2:
+At beginning of sys.h put the switches:
+#define SerialADS1115PB  0   //ADS1115PB sends messages to SerialMonitor
+#define SerialPCF8574IB  0   //PCF8574IB sends messages to SerialMonitor
+#define SerialTMC4761  0     //TMC4761 sends messages to SerialMonitor
+#define SerialWifi  0        //Wifi sends messages to SerialMonitor
+#define Serial0x03  0
+#define Serial0x08  0
+#define Serial0x1b  0
+#define Serial0x73  0          //Screen 0x73 sends messages to SerialMonitor
+#define Serial0x7b  0          //Screen 0x7b sends messages to SerialMonitor
+and so on.
+
+3: Bitte scanne alle screens durch. 
+Bei SEL steht welche Schritte gemacht werden sollen. Texte immer anzeigen
+
+Case 0x26 machen, in TMC.TXT findest du alle Screens die mit SEL arbeiten
+- 29;  75H;  Screen erstellen
+
+4. Wird SELECT 3 Sekunden allein gedrückt, oder alternativ 2x kurz?, wird der aktuelle Wert ins Flash gespeichert.
+   Wenn SD Card eingelesen wird, wird das Flash wieder mit den SD Daten überschrieben.
+   Wo wird momentan der TMC aktualisiert??
+
+5. PWM muss im LOOP bei jedem Durchlauf aktualisiert werden und im PWM Screen nur angezeigt werden
+
+6: https://github.com/analogdevicesinc/TMCL-C-Examples/tree/master/TMC4671-EVAL/ATTiny_Demo
+    TMC4671-EVAL/ATTiny_Demo/TMC4671_Register.h: eventuell übrnehmen?
+    TMC4671-EVAL/ATTiny_Demo/main.c: alls TMC4671-Beispiel übernehmen?
+
+7. negtiven Wert anzeigen, z.B. #8:09h Scale müsste -256 anzeigen
+
+9. Bei Screen #97 mit SELECT über x Mal einlesen Mittelwert bilden und dann erst in TMC schreiben
+
+12.
+    PORTIBx21 adress 0x21, 0 IB/OUT1SERVOREADY, 1 IB/OUT2, 2 IB/OUT3, 3 IBMotorOverTemp, 4 IBIN1SafeStop, 5 IBIN2, 6 IBIN3, 7 IBMotorON
+    PORTIBx23, 0 RslvrErr1, 1 RslvrErr2 ...
+    PORTMBx22, 0 HALLU, 1 HALLV, 2 HALLW, ...
+    PORTPBx20, ....
+    Mit SELECT zwischen den 4 Screens umschalten
+    PORTIBx21 kann keine Ports einlesen
+    Beim Einlesen für jeden PCF einen eigenen Fehlercounter vorsehen.
+
+
+
+#include <ezButton.h>
+
+ezButton button(7);  // Pin 7
+unsigned long lastClickTime = 0;
+const unsigned long doubleClickInterval = 500; // Zeitfenster für Doppelklick (ms)
+
+void setup() {
+  Serial.begin(9600);
+  button.setDebounceTime(50);
+}
+
+void loop() {
+  button.loop();
+
+  if (button.isPressed()) {
+    unsigned long currentTime = millis();
+    if (currentTime - lastClickTime < doubleClickInterval) {
+      Serial.println("Doppelklick erkannt!");
+    }
+    lastClickTime = currentTime;
+  }
+}
+
+
+
